@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const fs = require("fs");
 const path = require("path");
 
@@ -27,6 +26,7 @@ module.exports = class Product {
   }
 
   save() {
+    this.id = Math.random().toString();
     getProductsFromFile((Products) => {
       Products.push(this);
       fs.writeFile(p, JSON.stringify(Products), (err) => {
@@ -37,5 +37,12 @@ module.exports = class Product {
 
   static fetchAll(cb) {
     getProductsFromFile(cb);
+  }
+
+  static findById(id, cb) {
+    getProductsFromFile((products) => {
+      const product = products.find((p) => p.id === id);
+      cb(product);
+    });
   }
 };
